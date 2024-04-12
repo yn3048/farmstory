@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/common/layouts/adminLayout}">
+<head>
+<script>
+    function showSuccessMessage(){
+    alert('수정이 성공적으로 완료되었습니다.');
+    }
+</script>
+</head>
+<main layout:fragment="content">
+    <aside class="center-align">
+        <h3>주요기능</h3>
+        <ul>
+            <li>
+                <span>회원관리</span>
+                <ol>
+                    <li><a th:href="@{/admin/user/list}">회원목록</a></li>
+                    <li><a th:href="@{/admin/user/register}">관리자등록</a></li>
+                </ol>
+            </li>
+            <li>
+                <span>상품관리</span>
+                <ol>
+                    <li><a th:href="@{/admin/product/list}">상품목록</a></li>
+                    <li><a th:href="@{/admin/product/register}">상품등록</a></li>
+                </ol>
+            </li>
+            <li>
+                <span>주문관리</span>
+                <ol>
+                    <li><a th:href="@{/admin/order/list}">주문목록</a></li>
+                    <li><a th:href="@{/admin/order/delivery}">배송관리</a></li>
+                </ol>
+            </li>
+        </ul>
+    </aside>
+        <section id="modifyUser">
+            <nav>
+                <h3>회원 정보 조회 및 수정</h3>
+            </nav>
+            <article>
+                <h3 th:text="${user.uid} + '님 정보 입니다. '" style="font-size: 14px;"></h3>
+                <form th:action="@{/admin/user(uid=${user.uid})}" method="POST" onsubmit="showSuccessMessage()">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>User ID</th>
+                        <td th:text="${user.uid}" name="uid" style="text-align: center"></td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>
+                        <input type="text" th:value="${user.name}" name="name" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nick</th>
+                        <td>
+                        <input type="text" th:value="${user.nick}" name="nick" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>
+                        <input type="text" th:value="${user.email}" name="email" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>HP</th>
+                        <td>
+                        <input type="text" th:value="${user.hp}" name="hp" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Zip</th>
+                        <td>
+                        <input type="text" th:value="${user.zip}" name="zip" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Addr1</th>
+                        <td>
+                        <input type="text" th:value="${user.addr1}" name="addr1" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Addr2</th>
+                        <td>
+                        <input type="text" th:value="${user.addr2}" name="addr2" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Role</th>
+                        <td>
+                        <input type="text" th:value="${user.role}" name="role" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>SMS</th>
+                        <td>
+                        <input type="text" th:value="${user.sms}" name="sms" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Provider</th>
+                        <td>
+                        <input type="text" th:value="${user.provider}" name="provider" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>RDate</th>
+                        <td th:text="${#temporals.format(user.rdate, 'yyyy-MM-dd')}" name="rdate" style="text-align: center;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right"><input type="submit" value="수정" id="btnModify"></td>
+                    </tr>
+                </table>
+                </form>
+
+            </article>
+
+        </section>
+</main>
+</html>

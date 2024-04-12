@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.farmstory.mapper.ArticleMapper">
+
+    <select id="selectArticles" resultType="kr.co.farmstory.dto.ArticleDTO">
+        select a.*, b.nick from `article` AS a JOIN `user` AS b on a.uid = b.uid
+        <where>
+            <if test="grp == 'croptalk'">a.grp=#{param1}</if>
+            <if test="grp == 'event'">a.grp=#{param1}</if>
+            <if test="grp == 'community'">a.grp=#{param1}</if>
+
+            <if test="cate == 'notice'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'menu'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'chef'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'qna'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'faq'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'event'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'story'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'grow'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+            <if test="cate == 'school'">AND a.cate=#{param2} and a.parent=0 ORDER BY a.ano DESC</if>
+        </where>
+
+    </select>
+
+    <select id="selectArticlesMain" resultType="kr.co.farmstory.dto.ArticleDTO">
+        SELECT * FROM `article`
+        WHERE `cate`=#{cate} AND parent=0
+        ORDER BY `rdate` DESC
+        LIMIT 3
+    </select>
+
+    <select id="selectArticle" resultType="kr.co.farmstory.dto.ArticleDTO">
+        select a.*, b.nick from `article` AS a JOIN `user` AS b on a.uid = b.uid WHERE ano=#{ano}
+    </select>
+
+    <delete id="deleteArticle">
+        DELETE FROM `article` WHERE ano=#{ano}
+    </delete>
+
+    <update id="updateHit">
+        UPDATE `article` SET `hit` = `hit`+1 WHERE `ano`=#{ano}
+    </update>
+
+    <update id="updateGood">
+        UPDATE `article` SET `good` = `good`+1 WHERE `ano`=#{ano}
+    </update>
+
+    <update id="updateHate">
+        UPDATE `article` SET `hate` = `hate`+1 WHERE `ano`=#{ano}
+    </update>
+
+</mapper>

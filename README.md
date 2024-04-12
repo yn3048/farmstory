@@ -1,2 +1,1 @@
 # farmstory
-farmstory project

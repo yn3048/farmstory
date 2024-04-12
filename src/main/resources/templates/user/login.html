@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/common/layouts/defaultLayout}"
+      layout:fragment="Content"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>팜스토리::로그인</title>
+    <link rel="stylesheet" href="../css/style.css"/>
+    <link rel="stylesheet" href="../css/style2.css"/>
+</head>
+
+<div id="user">
+    <section class="login">
+        <h2>로그인</h2>
+        <form method="post">
+            <div class="loginForm">
+                <input type="text" class="id" name="uid" placeholder="아이디를 입력하세요."><br>
+                <input type="password" class="pw" name="pass" placeholder="8~15자리 영문+숫자+특수문자 조합"><br>
+                <input type="submit" class="loginBtn" value="로그인하기">
+            </div>
+            <div class="autoLogin">
+                <div class="checkboxSet">
+                    <input type="checkbox" id="checkbox1" checked>
+                    <label for="checkbox1">아이디 저장</label>
+                </div>
+                <div class="findIdPw">
+                    <a href="#" class="findId">아이디 찾기 | </a>
+                    <a href="#" class="findPw">비밀번호 찾기</a>
+                </div>
+            </div>
+        </form><!-- form end -->
+        <a class="register" th:href="@{/user/terms}">회원가입</a>
+        <div class="snsLogin">
+            <h4>간편 로그인</h4>
+            <a th:href="@{/oauth2/authorization/google}" class="oauth2">
+                <img th:src="@{/assets/img/google_1.png}" alt="로그인">
+            </a>
+            <a href="#" class="kakao">
+                <img th:src="@{/assets/img/kakao_2.png}" alt="로그인">
+            </a>
+        </div>
+    </section><!-- login end -->
+</div>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<!--공통 JS / CSS 영역을 관리하는 환경 영역-->
+<head th:replace="~{/common/fragments/config :: ConfigFragment}"></head>
+<style>
+    #alertModal, #confirmModal{
+        display: none;
+    }
+
+</style>
+<body>
+<!--Header 영역을 참조합니다.-->
+<header th:replace="~{/common/fragments/header :: HeaderFragment}"></header>
+
+<!--Content 내용 영역을 참조합니다-->
+<th:block layout:fragment="Content"></th:block>
+
+
+<!-- 확인 취소 Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancel" class="btn btn-secondary btnNo" data-bs-dismiss="modal">취소</button>
+                <button type="button" id="btnOk" class="btn btn-primary btnOk" data-bs-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 기본 Modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">확인</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">내용</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Footer 영역을 참조합니다.-->
+<footer th:replace="~{/common/fragments/footer :: FooterFragment}"></footer>
+</body>
+</html>

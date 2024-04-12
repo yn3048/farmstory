@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.farmstory.mapper.ProductMapper">
+
+    <insert id="insertProduct">
+        insert into product set
+        uid=#{uid},
+        pname=#{pname},
+        cate=#{cate},
+        rdate=NOW(),
+        price=#{price},
+        stock=#{stock},
+        delprice=#{delprice},
+        company=#{company},
+        discount=#{discount},
+        point=#{point},
+        etc=#{etc}
+    </insert>
+
+    <select id="selectProducts" resultType="kr.co.farmstory.dto.ProductDTO">
+        SELECT a.* , b.img1 FROM `product` AS a join `img` AS b on a.pno = b.pno
+        <where>
+            <if test="cate == 'vegetable'"> cate=#{cate} </if>
+            <if test="cate == 'nuts'"> cate=#{cate} </if>
+            <if test="cate == 'grains'"> cate=#{cate} </if>
+            <if test="cate == 'fruit'"> cate=#{cate} </if>
+
+            <if test="keyword != null and keyword != ''">AND pname LIKE CONCAT('%', #{keyword}, '%') </if>
+            and b.img1 is not NULL
+        </where>
+    </select>
+
+    <select id="selectProduct" resultType="kr.co.farmstory.dto.ProductDTO">
+        SELECT a.* , b.img1, b.img3 FROM `product` AS a join `img` AS b on a.pno = b.pno WHERE a.pno=#{pno} and b.img1 is not NULL
+    </select>
+
+ </mapper>
+

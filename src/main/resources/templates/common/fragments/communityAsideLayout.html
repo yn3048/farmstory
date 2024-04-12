@@ -1,0 +1,26 @@
+<!--Thymeleaf, ConfigFragment 선언-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="Fragmentcommunity">
+
+<aside>
+    <img src="../images/sub_aside_cate5_tit.png" alt="커뮤니티"/>
+
+    <ul class="lnb">
+        <li th:class="${cate == 'notice'} ? 'on'">
+            <a th:href="@{/article/list(grp='community',cate='notice')}">공지사항</a>
+        </li>
+        <li th:class="${cate == 'menu'} ? 'on'">
+            <a th:href="@{/article/list(grp='community',cate='menu')}">오늘의식단</a>
+        </li>
+        <li th:class="${cate == 'chef'} ? 'on'">
+            <a th:href="@{/article/list(grp='community',cate='chef')}">나도요리사</a>
+        </li>
+        <li th:class="${cate == 'qna'} ? 'on'">
+            <a th:href="@{/article/list(grp='community',cate='qna')}">1:1고객문의</a>
+        </li>
+        <li th:class="${cate == 'faq'} ? 'on'">
+            <a th:href="@{/article/list(grp='community',cate='faq')}">자주묻는질문</a>
+        </li>
+    </ul>
+</aside>

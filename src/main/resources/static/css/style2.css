@@ -1,0 +1,242 @@
+
+*, ::after, ::before {
+    box-sizing: inherit;
+}
+
+dl, ol, ul {
+    margin-bottom: 0;
+}
+
+header > .gnb {
+    left: -24px;
+}
+
+header > img {
+    margin-top: 14px;
+}
+
+#sub > .market > .list > table th {
+    text-align: center;
+}
+
+#sub > .market > .list > table tr > td:nth-child(3) {
+    text-align: center;
+}
+
+/* 부트스트랩 게시판 리스트 텍스트 정렬*/
+table > th {
+    text-align: center;
+}
+
+#sub > .market > .view > .basic > form > table tr {
+    font-size: 15px;
+    text-align: left;
+}
+
+#sub > .market > .view > .basic > form > table tr > td {
+    padding: 6px 0;
+    font-size: 17px;
+}
+
+#sub > .market > .view > .basic > form > table tr > td:nth-child(1) {
+    font-weight: bold;
+}
+
+#sub > .market > .view > .basic > form > table tr > td.prodName {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#sub > .market > .view > .basic > form > table tr > td > span {font-size: 18px}
+#sub > .market > .view > .basic > form > table tr > td > em {color: #fd5900}
+
+/* 🎈 market 목록 */
+#sub > .market > .list > table tr > td {
+    color: #222;
+    font-size: 15px;
+}
+
+#sub > .market > .list > table tr > td:nth-child(4){
+    color: #fd5900;
+    font-weight: bold;
+}
+
+/* 🎈 장바구니 */
+
+#sub > .market > .cart > form > table tr > td {
+    padding: 10px;
+    box-sizing: border-box;
+    color: #222;
+    text-align: center;
+    font-size: 15px;
+}
+
+
+.table>:not(caption)>*>* {
+    background-color: inherit;
+}
+
+th {
+    font-weight: bold;
+}
+
+.table {
+    --bs-table-color: inherit;
+}
+
+.table_green {
+    background-color:  #A8D031;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.btn-primary {
+    width: 70px;
+    height: 30px;
+    line-height: 30px;
+    background-color: #767676;
+    --bs-btn-color: #fff;
+    --bs-btn-border-color: inherit;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #088d00;
+    --bs-btn-hover-border-color: #097900;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #088d00;
+    --bs-btn-active-border-color: inherit;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: none;
+    --bs-btn-disabled-border-color: none;
+}
+
+
+
+/* 🎈 글쓰기 */
+.form-control {
+    padding: 0;
+    width: 98%;
+}
+
+.formWrite {
+    padding: 10px;
+}
+
+.card {
+    margin-top: 20px;
+}
+
+.card-header {
+    height: 30px;
+    line-height: 30px;
+    background-color: #A8D031;
+    color: #fff;
+    padding-left: 16px;
+    font-size: 15px;
+}
+
+#exampleFormControlInput1 {
+    height: 30px;
+    line-height: 30px;
+    padding: 5px;
+}
+
+#exampleFormControlTextarea1{
+    padding: 5px;
+}
+
+#formFileMultiple {
+    height: 20px;
+    padding: 5px;
+}
+
+/* 🎈 댓글 */
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    min-height: 120px;
+}
+
+.input-group-text {
+    flex: inherit;
+    display: block;
+    width: 100px;
+    height: 120px;
+    line-height: 120px;
+    font-size: 15px;
+}
+
+.btn-secondary {
+     height: 30px;
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #6c757d;
+    --bs-btn-border-color: #6c757d;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #5c636a;
+    --bs-btn-hover-border-color: #565e64;
+    --bs-btn-focus-shadow-rgb: 130, 138, 145;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #565e64;
+    --bs-btn-active-border-color: #51585e;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #6c757d;
+    --bs-btn-disabled-border-color: #6c757d;
+}
+
+.btn-warning {
+    height: 30px;
+    color: #ffffff;
+    --bs-btn-bg: #ffb804;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #fd9d0d;
+    --bs-btn-hover-border-color: #ffc720;
+    --bs-btn-focus-shadow-rgb: 217, 164, 6;
+    --bs-btn-active-bg: #ffcd39;
+    --bs-btn-active-border-color: none;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #000;
+    --bs-btn-disabled-bg: #ffc107;
+    --bs-btn-disabled-border-color: #ffc107;
+}
+
+
+
+/* 🎈 페이지번호 */
+.page-link:hover {
+    z-index: 2;
+    border-color: green;
+    background-color: #009400;
+    color: #fff;
+}
+
+.page-link {
+    color: #569f42;
+}
+
+.content{
+    padding: inherit;
+}
+
+
+
+.btn {
+    --bs-btn-padding-y: 0;
+}
+
+header .middle_nav {
+    position: relative;
+    bottom: 8px;
+}
+
+header .middle_nav .searchBox input {
+    box-sizing: border-box;
+}
+
+header .middle_nav .searchBox .searchBtn img {
+    vertical-align: inherit;
+}

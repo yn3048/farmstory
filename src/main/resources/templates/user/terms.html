@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/common/layouts/defaultLayout}"
+      layout:fragment="Content"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>팜스토리::약관</title>
+    <link rel="stylesheet" th:href="@{../css/style.css}"/>
+    <link rel="stylesheet" th:href="@{../css/style2.css}"/>
+    <style>
+        #user > img {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+
+
+
+<main>
+    <script>
+
+        window.onload = function () {
+            const agree1 = document.getElementsByName('agree1')[0];
+            const agree2 = document.getElementsByName('agree2')[0];
+            const sms = document.getElementsByName('sms')[0];
+            const btnNext = document.getElementsByClassName('btnNext')[0];
+
+
+            btnNext.onclick = () => {
+                if (agree1.checked && agree2.checked) {
+                    if (sms.checked) {
+                        smsvalue = "Y"
+                        window.location.href = "/farmstory/user/register?sms=" + smsvalue;
+                    } else {
+                        smsvalue = "N"
+                        window.location.href = "/farmstory/user/register?sms=" + smsvalue;
+                    }
+                    return false;
+                } else {
+                    // 확인 대화상자 표시
+                    const confirmation = window.confirm("🚨체크항목 1, 2번은 필수항목입니다");
+                    return false; // 폼 제출 중단
+                }
+            }
+        }
+
+
+    </script>
+    <section class="terms">
+        <table>
+            <caption>사이트 이용약관</caption>
+            <tr>
+                <td>
+                    <textarea readonly>[[${termsDTO.terms}]]</textarea>
+                    <p>
+                        <label><input type="checkbox" name="agree1">동의합니다</label>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <caption>개인정보 취급방침</caption>
+            <tr>
+                <td>
+                    <textarea readonly>[[${termsDTO.privacy}]]</textarea>
+                    <p>
+                        <label><input type="checkbox" name="agree2">동의합니다</label>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <caption>마케팅 수신동의</caption>
+            <tr>
+                <td>
+                    <textarea readonly>[[${termsDTO.sms}]]</textarea>
+                    <p>
+                        <label><input type="checkbox" id=sms name="sms" value="Y">동의합니다</label>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <a th:href="@{/}" class="btnCancle">취소</a>
+            <a th:href="@{/user/register}" class="btnNext">다음</a>
+        </div>
+    </section>
+</main>
+</html>

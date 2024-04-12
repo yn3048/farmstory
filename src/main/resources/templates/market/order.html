@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/common/layouts/defaultLayout}"
+      layout:fragment="Content"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>팜스토리::장보기</title>
+    <link rel="stylesheet" th:href="@{../css/style.css}"/>
+    <link rel="stylesheet" th:href="@{../css2/style.css}"/>
+    <style>
+
+        *, ::after, ::before {
+            box-sizing: inherit;
+        }
+
+        dl, ol, ul {
+            margin-bottom: 0;
+        }
+
+        header > .gnb {
+            left: -24px;
+        }
+
+        header > img {
+            margin-top: 14px;
+        }
+
+        #sub > .market > .list > table th {
+            text-align: center;
+        }
+
+        #sub > .market > .list > table tr > td:nth-child(3) {
+            text-align: center;
+        }
+
+        /* 부트스트랩 게시판 리스트 텍스트 정렬*/
+        table > th {
+            text-align: center;
+        }
+
+        #sub > .market > .view > .basic > form > table tr {
+            font-size: 15px;
+            text-align: left;
+        }
+
+        #sub > .market > .view > .basic > form > table tr > td {
+            padding: 6px 0;
+            font-size: 17px;
+        }
+
+        #sub > .market > .view > .basic > form > table tr > td:nth-child(1) {
+            font-weight: bold;
+        }
+
+        #sub > .market > .view > .basic > form > table tr > td.prodName {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #sub > .market > .view > .basic > form > table tr > td > span {font-size: 18px}
+        #sub > .market > .view > .basic > form > table tr > td > em {color: #fd5900}
+
+        /* 🎈 market 목록 */
+        #sub > .market > .list > table tr > td {
+            color: #222;
+            font-size: 15px;
+        }
+
+        #sub > .market > .list > table tr > td:nth-child(4){
+            color: #fd5900;
+            font-weight: bold;
+        }
+
+        #sub > .market > .order > .final > table caption {
+            text-align: center;
+            font-size: 20px;
+            caption-side: top;
+            color: #111;
+            margin-bottom: 5px;
+        }
+
+
+    </style>
+</head>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    window.onload = function(){
+
+        const loadData = document.getElementById('loadData');
+        const prodList = document.getElementById('prodList');
+        const finalBody = document.getElementsByClassName('final')[0].childNodes[1].childNodes[3].childNodes;
+
+        const usePointBtn = document.getElementById('usePointBtn');
+        const point = document.getElementsByClassName('point')[0];
+        const usePoint = document.getElementsByName('usepoint')[0];
+
+        document.getElementById('btnZip').onclick = function (e){
+            e.preventDefault();
+            postcode();
+        }
+
+        const selectAllCheckbox = document.getElementsByName('allcheckbox')[0];
+        const checkboxs = document.getElementsByName('checkbox');
+
+
+        selectAllCheckbox.addEventListener('change', function () {
+            for (let i = 0; i < checkboxs.length; i++) {
+                checkboxs[i].checked = selectAllCheckbox.checked;
+
+            }
+        });
+
+        console.log(checkboxs);
+        for (let i = 0; i < checkboxs.length; i++){
+            checkboxs[i].addEventListener('change',function (e){
+                selectAllCheckbox.checked=false;
+                setting();
+            });
+        }
+
+
+        usePointBtn.onclick = function(e){
+            e.preventDefault();
+
+            if(point.childNodes[1].innerText < usePoint.value){
+                alert("보유하신 포인트는 " + point.childNodes[1].innerText + "P 입니다.");
+            }else {
+                finalBody[6].childNodes[3].innerText = usePoint.value + "P";
+                let delP = parseInt(finalBody[8].childNodes[3].innerText);
+                if(delP < 10){
+                    delP = 0;
+                }
+                if (parseInt(finalBody[12].childNodes[3].innerText) - delP - parseInt(finalBody[2].childNodes[3].innerText) + parseInt(finalBody[4].childNodes[3].innerText) == 0){
+                    finalBody[12].childNodes[3].innerText = parseInt(finalBody[12].childNodes[3].innerText) - usePoint.value + "원";
+                    setting();
+                }
+
+
+            }
+
+        }
+
+
+        function setting (){
+            let allPcount = 0;
+            let allDiscount = 0;
+            let allPoint = 0;
+            let allPrice = 0;
+            let allRPrice = 0;
+            let allDelPrice = 0;
+            console.log(prodList.childNodes[3].childNodes[1].childNodes[1].checked);
+            console.log(prodList.childNodes[3].childNodes[17].innerText);
+            for(let i = 2;i < prodList.childNodes.length; i++){
+                if(i % 2 != 0){
+                    if(prodList.childNodes[i].childNodes[1].childNodes[1].checked){
+                        allPcount += parseInt(prodList.childNodes[i].childNodes[9].innerText);
+                        allDiscount += parseInt(prodList.childNodes[i].childNodes[11].innerText);
+                        allPoint += parseInt(prodList.childNodes[i].childNodes[13].innerText) * parseInt(prodList.childNodes[i].childNodes[9].innerText);
+                        allPrice += parseInt(prodList.childNodes[i].childNodes[15].innerText) * parseInt(prodList.childNodes[i].childNodes[9].innerText);
+                        allRPrice += parseInt(prodList.childNodes[i].childNodes[17].innerText) * parseInt(prodList.childNodes[i].childNodes[9].innerText);
+                        allDelPrice += parseInt(prodList.childNodes[i].childNodes[19].innerText);
+                    }
+                }
+            }
+            let comment
+            if(allPrice >= 30000){
+                allDelPrice = 0;
+                comment = "3만원 이상 무료배송";
+            }else{
+                comment = allDelPrice + "원";
+            }
+
+            finalBody[0].childNodes[3].innerText = allPcount + "개";
+            finalBody[2].childNodes[3].innerText = allPrice + "원";
+            finalBody[4].childNodes[3].innerText = allPrice-allRPrice + "원";
+
+            finalBody[8].childNodes[3].innerText = comment;
+            finalBody[10].childNodes[3].innerText = allPoint + "P";
+            finalBody[12].childNodes[3].innerText = allRPrice + allDelPrice - parseInt(finalBody[6].childNodes[3].innerText) + "원";
+
+            document.getElementById('finalPrice').value = allRPrice + allDelPrice - parseInt(finalBody[6].childNodes[3].innerText);
+
+        }
+        setting();
+    }
+</script>
+<div id="sub">
+    <div><img th:src="@{../images/sub_top_tit2.png}" alt="MARKET"></div>
+    <section class="market">
+        <aside>
+            <img th:src="@{../images/sub_aside_cate2_tit.png}" alt="장보기"/>
+
+            <ul class="lnb">
+                <li class="on"><a th:href="@{/market/list}">장보기</a></li>
+            </ul>
+        </aside>
+        <article class="order">
+            <nav>
+                <img th:src="@{../images/sub_nav_tit_cate2_tit1.png}" alt="장보기"/>
+                <p>
+                    HOME > 장보기 > <em>장보기</em>
+                </p>
+            </nav>
+
+            <!-- 내용 시작 -->
+            <p class="sort">
+                <a th:href="@{#}" class="on">주문상춤 전체(10)</a>
+            </p>
+            <table border="0">
+                <form th:action="@{/market/order/save}" method="post">
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" name="allcheckbox" checked >
+                    </th>
+                    <th>이미지</th>
+                    <th>종류</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>할인</th>
+                    <th>포인트</th>
+                    <th>가격</th>
+                    <th>소계</th>
+                </tr>
+                </thead>
+                <tbody id="prodList">
+                <tr class="empty">
+                    <td colspan="9"  th:if="${cartDTOList.isEmpty()}">장바구니에 상품이 없습니다.</td>
+                </tr>
+
+                <tr th:each="cartDTO:${cartDTOList}">
+                    <td>
+                        <input type="checkbox" name="checkbox" th:value="${cartDTO.pno} + ',' + ${cartDTO.pcount}" checked>
+                    </td>
+                    <td>
+                        <a th:href="@{#}"><img th:src="@{|/product/${cartDTO.cate}/${cartDTO.img1}|}" class="thumb"></a>
+                    </td>
+                    <td th:text="${cartDTO.cate}"></td>
+                    <td th:text="${cartDTO.pname}"><a th:href="@{#}"></a></td>
+                    <td th:text="${cartDTO.pcount}"></td>
+                    <td th:text="${cartDTO.discount} + '%'"></td>
+                    <td th:text="${cartDTO.point} + 'p'"></td>
+                    <td th:text="${cartDTO.price} + '원'"></td>
+                    <td th:text="${cartDTO.price - (cartDTO.price * cartDTO.discount / 100)} + '원'"></td>
+                    <td style="display: none;" th:text="${cartDTO.delprice}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+            <div class="final">
+                <table border="0">
+                    <caption>최종결제정보</caption>
+                    <tr>
+                        <th>상품수</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>상품금액</th>
+                        <td>27,000</td>
+                    </tr>
+                    <tr>
+                        <th>할인금액</th>
+                        <td style="color:#fd5900; font-weight: bold">5,0000원</td>
+                    </tr>
+                    <tr>
+                        <th>포인트사용</th>
+                        <td>0P</td>
+                    </tr>
+                    <tr>
+                        <th>배송비</th>
+                        <td class="delivery"></td>
+                    </tr>
+                    <tr>
+                        <th>포인트적립</th>
+                        <td>400P</td>
+                    </tr>
+                    <tr>
+                        <th>전체주문금액</th>
+                        <td class="total">22,000</td>
+                    </tr>
+                </table>
+                <input type="submit" class="btnOrder" value="결제하기">
+            </div>
+
+
+            <h3>주문정보 입력</h3>
+            <div class="shipping">
+                <table>
+                    <tr>
+                        <td>주문자</td>
+                        <td><input type="text" name="orderer" th:value="${userDTO.name}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>휴대폰</td>
+                        <td><input type="text" name="userhp" th:value="${userDTO.hp}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>포인트사용</td>
+                        <td>
+                            <input type="text" class="usepoint" name="usepoint" th:value="${userDTO.userpoint}">
+                            <button id="usePointBtn">사용하기</button>
+                            <p class="point">
+                                사용가능 <span>[[${userDTO.userpoint}]]</span>원
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>받는분</td>
+                        <td><input type="text" name="receiver" required></td>
+                    </tr>
+                    <tr>
+                        <td>연락처</td>
+                        <td><input type="text" name="hp" required></td>
+                    </tr>
+                    <tr>
+                        <td>배송주소</td>
+                        <td>
+                            <input type="text" name="zip" id="inputZip" readonly required><button id="btnZip">우편번호 검색</button>
+                            <input type="text" name="addr1" id="inputAddr1" placeholder="기본주소 검색" required>
+                            <input type="text" name="addr2" id="inputAddr2" placeholder="상세주소 입력">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>결제방법</td>
+                        <td>
+                            <label><input type="radio" name="payment" value="transfer">계좌이체</label>
+                            <label><input type="radio" name="payment" value="credit">신용카드</label>
+                            <label><input type="radio" name="payment" value="check">체크카드</label>
+                            <label><input type="radio" name="payment" value="phone">휴대폰</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>기타</td>
+                        <td>
+                            <textarea name="etc"></textarea>
+                        </td>
+                    </tr>
+                    <input id="finalPrice" type="hidden" name="total">
+                    <input type="hidden" name="uid" th:value="${userDTO.uid}">
+                    </form>
+                </table>
+            </div>
+
+            <!-- 내용 끝 -->
+
+        </article>
+    </section>
+
+</div>
+
+</html>

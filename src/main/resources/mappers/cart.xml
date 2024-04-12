@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.farmstory.mapper.CartMapper">
+
+    <insert id="insertOrder" parameterType="kr.co.farmstory.dto.OrderDTO" useGeneratedKeys="true" keyProperty="ono">
+        insert into `order` set
+        uid = #{uid},
+        odate = now(),
+        usepoint = #{usepoint},
+        receiver = #{receiver},
+        hp = #{hp},
+        zip = #{zip},
+        addr1 = #{addr1},
+        addr2 = #{addr2},
+        payment = #{payment},
+        etc = #{etc},
+        total = #{total}
+    </insert>
+
+    <!--장바구니 담기-->
+    <insert id="insertCart">
+
+        insert into cart set
+            uid = #{uid},
+            pno = #{pno},
+            pcount = #{pcount}
+    </insert>
+
+    <select id="selectCartList" resultType="kr.co.farmstory.dto.CartDTO">
+
+        SELECT
+        cart.pcount,
+        product.cate,
+        product.pname,
+        product.discount,
+        product.point,
+        product.price,
+        product.pno,
+        user.name,
+        user.hp,
+        user.userpoint,
+        user.zip,
+        user.addr1,
+        user.addr2,
+        user.uid,
+        img.img1
+        FROM cart
+        INNER JOIN product ON cart.pno = product.pno
+        INNER JOIN img ON cart.pno = img.pno
+        INNER JOIN user ON user.uid = cart.uid
+        WHERE cart.uid = #{uid}
+
+    </select>
+
+    <select id="selectCartList2" resultType="kr.co.farmstory.dto.CartDTO">
+        SELECT
+        SUM(cart.pcount) as pcount,
+        product.cate,
+        product.pname,
+        product.discount,
+        product.point,
+        product.price,
+        product.pno,
+        product.delprice,
+        user.uid,
+        ANY_VALUE(img.img1) as img1
+        FROM cart
+        JOIN product ON cart.pno = product.pno
+        JOIN user ON user.uid = cart.uid
+        JOIN img ON img.pno = cart.pno
+        WHERE cart.uid = #{uid}
+        GROUP BY product.pno
+    </select>
+
+    <select id="getCartByPno" resultType="kr.co.farmstory.dto.CartDTO">
+        SELECT pno FROM  cart WHERE uid = #{uid}
+    </select>
+
+    <update id="updateCart">
+        UPDATE cart
+        SET pcount = pcount + #{pcount}
+        WHERE pno = #{pno}
+    </update>
+
+    <!--장바구니 상품 삭제-->
+    <delete id="deleteCartList">
+        DELETE FROM cart WHERE pno = #{pno} AND uid = #{uid}
+    </delete>
+
+
+</mapper>

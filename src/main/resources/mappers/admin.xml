@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.farmstory.mapper.AdminMapper">
+
+
+    <!--adminIndex 회원 목록 5명 출력-->
+    <select id="adminIdxUsers" resultType="kr.co.farmstory.dto.UserDTO">
+        SELECT `uid`, `name`, `nick`, `hp`, `email`, `role`, `rdate` FROM `user`
+        ORDER BY `rdate` DESC
+        LIMIT 5
+    </select>
+
+    <!--admin.user.list 출력-->
+    <select id="adminSelectUsers" resultType="kr.co.farmstory.dto.UserDTO">
+        SELECT * FROM `user`
+    </select>
+
+    <!-- admin.user.modify 출력 -->
+    <select id="adminSelectUserByUid" resultType="kr.co.farmstory.dto.UserDTO">
+        SELECT * FROM `user`
+        WHERE `uid` = #{uid}
+    </select>
+
+    <update id="adminUpdateUser" parameterType="kr.co.farmstory.dto.UserDTO">
+        UPDATE `user` SET
+        name=#{name}, nick=#{nick},
+        email=#{email}, hp=#{hp},
+        zip=#{zip}, addr1=#{addr1},
+        addr2=#{addr2}, role=#{role},
+        sms=#{sms}, provider=#{provider}
+        WHERE uid=#{uid}
+    </update>
+
+    <!--admin.user.register 등록-->
+    <insert id="insertAdmin">
+        insert into user set
+        uid=#{uid},
+        pass=#{pass},
+        name=#{name},
+        nick=#{nick},
+        email=#{email},
+        hp=#{hp},
+        zip=#{zip},
+        addr1=#{addr1},
+        addr2=#{addr2},
+        regip=#{regip},
+        role=#{role},
+        rdate=NOW()
+    </insert>
+
+    <!--admin.index 상품 목록 5개 출력-->
+    <select id="adminIdxProducts" resultType="kr.co.farmstory.dto.ProductDTO">
+        SELECT * FROM `product`
+        ORDER BY `pno` DESC
+        LIMIT 5
+    </select>
+
+    <!--admin.product.list 출력-->
+    <select id="adminSelectProducts" resultType="kr.co.farmstory.dto.ProductDTO">
+        SELECT a.*, b.img1 FROM `product` AS a
+        JOIN `img` AS b ON a.pno = b.pno
+        AND b.img1 IS NOT NULL
+        ORDER BY a.rdate DESC, a.pno ASC
+    </select>
+
+    <delete id="adminArticleDelete" parameterType="kr.co.farmstory.dto.ProductDTO">
+        DELETE FROM `article` WHERE uid = #{uid}
+    </delete>
+
+    <delete id="adminUserDelete" parameterType="kr.co.farmstory.dto.UserDTO">
+        DELETE FROM `user` WHERE uid = #{uid}
+    </delete>
+
+    <delete id="adminOrderDelete" parameterType="kr.co.farmstory.dto.OrderlistDTO">
+        DELETE FROM `orders` WHERE ono = #{ono}
+    </delete>
+
+    <delete id="adminProductDelete" parameterType="kr.co.farmstory.dto.ProductDTO">
+        DELETE FROM `product` WHERE pno = #{pno}
+    </delete>
+
+    <select id="adminSelectOrder" parameterType="kr.co.farmstory.dto.OrderlistDTO">
+        SELECT a.*, b.*, c.*
+        FROM `orders` AS a
+        JOIN `orderlist` AS b ON a.ono = b.ono
+        JOIN product AS c ON b.pno = c.pno
+    </select>
+
+    <select id="adminSelectOrderlimit" parameterType="kr.co.farmstory.dto.OrderlistDTO">
+        SELECT a.*, b.*, c.*
+        FROM `orders` AS a
+        JOIN `orderlist` AS b ON a.ono = b.ono
+        JOIN product AS c ON b.pno = c.pno
+        order by a.odate DESC limit 5
+    </select>
+
+
+</mapper>

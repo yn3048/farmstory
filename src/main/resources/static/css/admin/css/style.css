@@ -1,0 +1,399 @@
+/* 전체 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    font: normal 12px '고딕';
+}
+ul, ol {list-style: none;}
+a {text-decoration: none; color: #111;}
+
+#container {
+    position: relative;
+    width: 1200px;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* aside 영역 */
+.center-align {
+    text-align: center;
+}
+.center-align ul {
+    list-style-type: none;
+    padding-left: 0;
+    display: inline-block;
+    text-align: left; /* 리스트 항목들을 왼쪽 정렬합니다. */
+}
+.center-align ol {
+    list-style-position: inside; /* ol 요소 내부에 목록 마커를 표시합니다. */
+}
+.center-align ol li {
+    margin-left: -10px; /* li 요소를 들여쓰기합니다. */
+}
+
+/* 헤더영역 */
+header {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background-image: url('../../../images/admin/images/admin_bg.jpg');
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+header > p {
+    float: right;            
+}
+header > p > a {
+    color: #fff;
+}
+
+/* 왼쪽 사이드 */
+main {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+main > aside {
+    float: left;
+    width: 176px;
+    height: 400px;
+    padding: 10px;
+    box-sizing: border-box;
+}       
+
+main > aside > h3 {            
+    padding: 5px 20px;
+    border-radius: 20px;
+    background-color: rgb(229, 229, 229);
+    border: 1px solid rgb(204, 204, 204);            
+    font-size: 14px;
+}
+
+main > aside > ul {
+    padding: 16px;
+    box-sizing: border-box;    
+}
+main > aside > ul > li {
+    line-height: 22px;
+    margin-top: 10px;
+    
+}
+
+main > aside > ul > li.on > span {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+main > aside > ul > li > ol {
+    color:#111;
+    text-indent: 10px;
+}
+main > aside > ul > li > ol > li {
+    line-height: 22px;
+}
+main > aside > ul > li > ol > li::before {
+    content: '·';
+    margin-right: 4px;
+}
+
+main > aside ol > li > a:hover {
+    text-decoration: underline;
+}
+
+/* 메인 컨텐츠 */
+main > section {
+    float: right;
+    width: 1000px;
+    min-height: 400px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* 🎈회원 정보 수정 폼*/
+main > #modifyUser {
+    float: none;
+    width: 600px;
+    min-height: 400px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 30px 0px 30px 380px;
+}
+
+main > #modifyUser > nav > h3 {
+    text-align: center;
+}
+
+/* 🎈관리자 회원가입 폼 */
+#userRegister > .register {
+    width: 600px;
+    height: auto;
+    margin: 35px auto;
+    box-sizing: border-box;
+}
+
+
+main > section > nav > h3 {
+    font-size: 17px;
+    font-weight: bold;
+    color: #3f3f3f;
+}
+
+main > section > article {
+    margin-top: 12px;
+}
+main > section > article > h3 {
+    margin: 6px 0;
+}
+main > section > article > h3 > .more {
+    float: right;
+}
+main > section > article table {
+    width: 100%;
+    height: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-top: 2px solid #333;
+    
+}
+main > section > article table tr {
+    border-bottom: 1px dotted #999;
+    text-align: center;
+}
+main > section > article table tr > th {
+    padding: 12px;
+    background-color: #fbfbfb;
+}
+main > section > article table tr > td {
+    padding: 12px;
+    text-align: center;
+}
+
+
+
+/* 푸터영역 */
+footer {
+    width: 100%;
+    height: auto;            
+    background-color: #353535;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+footer > p {
+    color: #fff;
+}
+
+/* 상품관리(목록) */
+#productList {}
+#productList > article {}
+#productList > article > table {}
+#productList table {}
+#productList table .thumb {
+    width: 60px;
+}
+#productList > article > p {            
+    padding: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#productList .productDelete {
+    float: left;
+    margin-top: 10px;
+    padding: 5px;
+    width: 60px;
+    height: 30px;
+    line-height: 20px;
+    text-align: center;
+    background-color: #fd5900;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+
+}
+
+#productList .productRegister {
+    float: right;
+    padding: 6px 12px;            
+    border-radius: 5px;
+    background-color: #006913a3;
+    border: 1px solid #006913a3;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+#productList .paging {            
+    text-align: center;
+}
+
+#productList .paging > .on {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* 상품관리(등록) */
+#productRegister {}
+#productRegister > article {}
+
+#productRegister table {}
+#productRegister table tr {}
+#productRegister table tr > td {
+    text-align: left;
+}
+#productRegister table tr > td:first-child {
+    width: 12%;
+}
+#productRegister table tr > td > label {
+    margin-right: 16px;
+}
+#productRegister table tr > td > p {
+    margin-bottom: 8px;
+}
+#productRegister table tr > td > p > span {
+    display: block;
+    margin-bottom: 2px;
+}
+
+#productRegister form > p {
+    margin: 12px 0;
+    text-align: center;
+}
+#productRegister form .btnCancel {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+#productRegister form input[type=submit] {
+    padding: 6px 12px;            
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+#productRegister form input[type=submit]:hover {
+    background-color: #ccc;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+/* 주문관리 */
+#orderList > article > p {            
+    padding: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#orderList .paging {
+    text-align: center;
+}
+
+#orderList .paging > .on {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* 사용자 회원가입 */
+.register {
+    width: 600px;
+    height: auto;
+    margin: 60px auto;
+    box-sizing: border-box;
+}
+.register > form {
+}
+.register > form > table {
+    width: 100%;
+    margin-bottom: 10px;
+    border-top: 2px solid #111;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.register > form > table > caption {
+    text-align: left;
+    padding: 10px 0;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.register > form > table tr {
+}
+.register > form > table td {
+    padding: 6px 12px;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+}
+.register > form > table td:nth-child(1) {
+    width: 106px;
+    background: #f5f8f9;
+}
+.register > form > table td:nth-child(2) {
+}
+.register > form > table input {
+    width: 162px;
+    height: 22px;
+    border: 1px solid #e4eaec;
+    background: #f7f7f7;
+    text-indent: 4px;
+}
+
+.register > form > table input[name="addr1"] {
+    width: 360px;
+    margin: 4px 0;
+}
+.register > form > table input[name="addr2"] {
+    width: 360px;
+}
+
+.register > form > table button {
+    border: none;
+    vertical-align: 1px;
+}
+
+.register > form > div {
+    text-align: right;
+}
+
+.btnSubmit {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #3b3c3f;
+    background: #4b545e;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btnCancel {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid #bebebe;
+    background: #fdfdfd;
+    color: #111;
+}
+
+select{
+    width: 100px;
+    border-radius: 0;
+}
+
+input {
+    outline: none;
+}
+
+#btnModify {
+    background-color: #ffa900;
+    width: 10%;
+    height: 30px;
+    color: #fff;
+    border-radius: 5px;
+    border: inherit;
+}
+
+/* 🎈페이지 번호 */
+.active>.page-link, .page-link.active {
+    background-color: #006913a3;
+    border: none;
+}
+
+.page-link {
+    color: #569f42;
+}

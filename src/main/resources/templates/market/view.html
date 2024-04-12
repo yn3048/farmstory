@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{/common/layouts/defaultLayout}"
+      layout:fragment="Content"
+>
+<script th:src="@{/js/util.js}"></script>
+<script th:inline="javascript">
+    window.onload = function (){
+
+        const totalElement = document.getElementById('total');
+        const totalValue = parseInt(totalElement.innerText);
+
+        const discountPrice = document.getElementById('discountPrice');
+        const discountPricevalue = parseInt(discountPrice.innerText);
+
+        const price = document.getElementById('ProductPrice');
+        const priceValue = parseInt(price.innerText);
+
+        console.log('price : ' + price);
+        console.log('price : ' + priceValue);
+
+        totalElement.innerText = totalValue;
+        priceValue.innerText = priceValue;
+
+        totalElement.innerText = totalValue.toLocaleString() + ' 원'; // 결과값에 원(₩) 추가
+        discountPrice.innerText = '-' + discountPricevalue.toLocaleString() + ' 원'; // 결과값에 원(₩) 추가
+        priceValue.innerText = totalValue.toLocaleString() + ' 원';
+
+
+        //discountPrice.style.color = 'red';
+        //totalElement.style.color = 'blue';
+
+        const btnCart = document.getElementById('btnCart');
+        const btnOrder = document.getElementById('btnOrder');
+
+        const count = document.getElementById('count');
+        const hiddenPrice = document.getElementById('hiddetotal');
+        const delprice = document.getElementById('delPrice');
+        const totalPrice = document.getElementById('total');
+
+        let countInputObj = count.value;
+        console.log('countInputObj..1 :' + countInputObj);
+
+        // 입력 이벤트를 사용하여 값이 변경될 때마다 JavaScript 객체를 업데이트합니다.
+        count.addEventListener('input', function() {
+            // 변경된 값을 JavaScript 객체에 반영합니다.
+            countInputObj = parseInt(count.value);
+
+            // 변경된 객체를 콘솔에 출력합니다.
+            console.log('countInputObj..2 :' + countInputObj);
+        });
+
+        const countValue = count.value;
+        console.log('countValue : '+countValue);
+
+        /*
+            구매 수량 수정 시 합계 정보 갱신
+         */
+        count.onchange = function () {
+
+            const price = parseInt(hiddenPrice.innerText);
+            const quantity = parseInt(count.value);
+            console.log('quantity : ' + quantity);
+
+            // 배송비
+            let delprice2 = parseInt(delprice.innerText);
+
+            console.log('discountPrice : ' + discountPrice);
+
+            // 총 할인된 가격 = 할인가격 * 물품 수
+            let discountPriceSum = -(discountPricevalue * quantity);
+            console.log('discountPriceSum : ' + discountPriceSum);
+
+            let total = (price * quantity) + delprice2 - discountPriceSum;// 할인 후 총액
+
+            if (total >= 30000) {
+                delprice2 = 0;
+                document.getElementById('freeDel').style.display = 'block';
+                document.getElementById('delPrice').style.display = 'none';
+                document.getElementById('freeDelText').style.display = 'none';
+            }else {
+                document.getElementById('freeDel').style.display = 'none';
+                document.getElementById('delPrice').style.display = 'block';
+                document.getElementById('freeDelText').style.display = 'block';
+            }
+
+            // 배송비 포함하여 최종 총액 재계산
+            total = (price * quantity) + delprice2 - discountPriceSum + '원';
+
+            totalPrice.innerText = total.toString();
+
+            discountPrice.innerText = discountPriceSum.toString() + '원';
+
+
+        }
+
+
+        /*
+            장바구니 클릭 시 구매수량 값을 get으로 포함시켜 전송
+         */
+
+        const sendForm = document.getElementById('sendForm');
+
+        if(btnCart){
+            btnCart.onclick = async function (e){
+                e.preventDefault();
+
+                if(confirm("장바구니에 담으시겠습니까?")) {
+                    const jsonData = {
+                        "pno": sendForm.pno.value,
+                        "pcount": sendForm.pcount.value
+                    }
+                    console.log(jsonData);
+
+                    const data = await fetchPost(`/farmstory/cart/insert`,jsonData);
+                    console.log(data);
+                    if(data != null){
+                        if(confirm("장바구니로 이동하시겠습니까?")){
+                            sendForm.submit();
+                        }
+                    }else{
+                        alert("등록에 실패했습니다.");
+                    }
+                    return false;
+                }else{
+
+                    return false;
+                }
+            }
+        }
+
+        if(btnOrder){
+            btnOrder.onclick = async function (e){
+                e.preventDefault();
+                const jsonData = {
+                    "pno": sendForm.pno.value,
+                    "pcount": sendForm.pcount.value
+                }
+                console.log(jsonData);
+
+                const data = await fetchPost(`/farmstory/cart/insert`,jsonData);
+                console.log("data : " + data);
+                if(data != null){
+                    sendForm.action = "/farmstory/market/order";
+                    sendForm.submit();
+
+                }else{
+                    alert("등록에 실패했습니다.");
+                }
+                return false;
+            }
+        }
+
+    }
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>팜스토리::장보기</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style2.css}"/>
+</head>
+
+<div id="sub">
+    <div><img th:src="@{/images/sub_top_tit2.png}" alt="MARKET"></div>
+    <section class="market">
+        <aside>
+            <img th:src="@{/images/sub_aside_cate2_tit.png}" alt="장보기"/>
+
+            <ul class="lnb">
+                <li class="on"><a th:href="@{/market/list}">장보기</a></li>
+            </ul>
+        </aside>
+        <article class="view">
+            <nav>
+                <img th:src="@{/images/sub_nav_tit_cate2_tit1.png}" alt="장보기"/>
+                <p>
+                    HOME > 장보기 > <em>장보기</em>
+                </p>
+            </nav>
+
+            <!-- 내용 시작 -->
+
+            <h3>기본정보</h3>
+            <div class="basic">
+
+                <form th:action="@{/market/cart}" id="sendForm" method="post">
+                    <img th:src="@{|/product/${productDTO.cate}/${productDTO.img1}|}" alt="딸기 500g">
+                    <table border="0">
+
+                        <tr>
+                            <td>상품명</td>
+                            <td class="prodName">[[${productDTO.pname}]]</td>
+                        </tr>
+                        <tr>
+                            <td hidden="">상품코드</td>
+                            <td hidden="">[[${productDTO.pno}]]</td>
+                            <td>
+                                <input type="hidden" name="pno" th:value="${productDTO.pno}">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>배송비</td>
+                            <td>
+                                <span id="delPrice">[[${productDTO.delprice}]]원</span>
+                                <span id="freeDel" style="display: none; color: tomato; font-weight: bold;">😆무료 배송</span>
+                                <em id="freeDelText">3만원 이상 무료배송</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>판매가격</td>
+                            <td class="ProductPrice" id="ProductPrice" th:text="${productDTO.price}"></td>
+                        </tr>
+                        <tr>
+                            <td>구매수량</td>
+                            <td>
+                                <input type="number" name="pcount" id="count"  value="1" min="1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>할인율</td>
+                            <td class="discount1">[[${productDTO.discount}]]%</td>
+                        </tr>
+                        <tr>
+                            <td>할인금액</td>
+                            <td class="discountPrice discount2" id="discountPrice" th:text="(${productDTO.price} * (${productDTO.discount} / 100)) + '원'"></td>
+                            <td class="hiddeDiscountPrice" id="hiddeDiscountPrice" th:text="(${productDTO.price} * (${productDTO.discount} / 100))" hidden></td>
+                        </tr>
+                        <tr>
+                            <td>합계</td>
+                            <td class="total" id="total" th:text="${productDTO.delprice} + (${productDTO.price} - (${productDTO.price} * (${productDTO.discount} / 100))) + '원'"></td>
+                            <td class="hiddetotal" id="hiddetotal" th:text="(${productDTO.price} - ${productDTO.price} * (${productDTO.discount} / 100))" hidden></td>
+                        </tr>
+                    </table>
+                </form>
+
+                <div class="viewBtn" style="float: right; margin-top: 10px;">
+                    <a sec:authorize="isAuthenticated()" th:href="@{/market/cart(pno=${productDTO.pno})}" id="btnCart" class="btn btnCart">장바구니</a>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/market/order(pno=${productDTO.pno})}" id="btnOrder" class="btn btnOrder">바로구매</a>
+                </div>
+
+            </div>
+
+            <h3>상품설명</h3>
+            <div class="detail">
+                <img th:src="@{|/product/${productDTO.cate}/${productDTO.img3}|}" alt="">
+
+            </div>
+
+            <h3>배송정보</h3>
+            <div class="delivery">
+                <p>
+                    입금하신 이후 택배송장번호는 SMS(문자서비스)를 통해 고객님께 안내해드립니다.
+                </p>
+            </div>
+
+            <h3>교환/반품</h3>
+            <div class="exchange">
+                <table border="0">
+                    <tr>
+                        <td>교환 반품이 가능한 경우</td>
+                        <td>
+                            <ul>
+                                <li>팜스토리 상품에 하자가 있거나 불량인 경우</li>
+                                <li>채소, 과일, 양곡등의 식품은 만1일 이내</li>
+                                <li>기타 상품은 수령일로부터 영업일 기준 일주일 이내</li>
+                                <li>받으신 상품이 표시사항과 다른 경우에는 받으신 날로부터 일주일 이내</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>교환 반품이 불가능한 경우</td>
+                        <td>
+                            <ul>
+                                <li>신선 식품의 경우 단순히 마음에 들지 않는 경우</li>
+                                <li>단순 변심으로 상품이 가치가 훼손돼서 판매가 어려운 경우</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <a href="#" id="top">
+                <img th:src="@{/images/green-top-60.png}"  alt="topBtn">
+            </a>
+            <!-- 내용 끝 -->
+        </article>
+    </section>
+
+</div>
+
+</html>

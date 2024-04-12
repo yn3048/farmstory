@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/common/layouts/defaultLayout}"
+      layout:fragment="Content"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>팜스토리::장바구니</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{../css/style.css}"/>
+    <link rel="stylesheet" th:href="@{../css/style2.css}"/>
+
+    <style>
+        #sub > .market > .cart > form> table {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: 1px solid #111;
+            margin-top: 10px;
+        }
+
+        #sub > .market > .cart > form > table tr {border-bottom: 1px solid #eee;}
+
+        #sub > .market > .cart > form > table tr > th {
+            padding: 6px;
+            background-color:  #A8D031;
+            color: #fff;
+            text-align: center;
+        }
+
+
+        #sub > .market > .cart > form > table tr > td:last-child {
+            font-weight: bold;
+            color: #222;
+        }
+
+        #sub > .market > .cart > form > table tr > td > a > img.thumb{
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        #sub > .market > .cart > form > input[name=delCart] {
+            margin-top: 20px;
+            padding: 6px;
+            width: 80px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff412d;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sub > .market > .cart > .info > form {
+            float: right;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+
+        #sub > .market > .cart > .info > form > table {
+            float: right;
+            width: 100%;
+            margin-left: 16px;
+            border-top: 1px solid #111;
+            border-bottom: 1px solid #111;
+        }
+
+        #sub > .market > .cart > .info > form > table caption {padding: 6px;}
+
+        #sub > .market > .cart > .info > form > table th {
+            text-align: left;
+            padding: 5px 5px 5px;
+            line-height: 26px;
+            box-sizing: border-box;
+            font-weight: normal;
+        }
+        #sub > .market > .cart > form > table tr > td.discount {color: #fd5900; font-weight: bold;}
+
+        #sub > .market > .cart > .info > form > table tr {padding: 5px 0;}
+        #sub > .market > .cart > .info > form > table tr td {text-align: left;}
+        #sub > .market > .cart > .info > form > table tr td.delivery {color: #3754ff; font-weight: bold;}
+        #sub > .market > .cart > .info > form > table tr td.total { font-weight: bold; color: #222222; font-size: 17px;}
+        #sub > .market > .cart > .info > form > table tr td.discount {font-weight: bold; color:#fd5900;}
+        #sub > .market > .cart > .info > form > .btnOrder {
+            clear: both;
+            float: right;
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff412d;
+            color: white;
+            cursor: pointer;
+        }
+
+        #sub #sendForm2 caption {
+            text-align: center;
+            font-size: 20px;
+            caption-side: top;
+            color: #111;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<script th:src="@{/js/util.js}"></script>
+<script>
+
+    window.onload = function (){
+
+        const delCart = document.getElementById('delCart');
+        const sumAll = document.getElementsByClassName('sumAll');
+
+        const checkboxes = document.getElementsByName('pno');
+        const selectAll = document.getElementsByName('selectAll')[0];
+
+        // 🎈상품 전체 선택
+        selectAll.addEventListener('change', function () {
+
+            for (let i = 0; i < checkboxes.length; i++) {
+               checkboxes[i].checked = selectAll.checked;
+                console.log("전체선택");
+                sumAllList();
+            }
+        });
+
+        // 🎈 체크된 상품
+        for (let i = 0; i < checkboxes.length; i++){
+            checkboxes[i].addEventListener('change',function (e){
+                console.log("선택된 상품");
+                sumAllList();
+            });
+        }
+
+        // 🎈전체합계 계산
+        function sumAllList (){
+
+            const selectedItems = document.querySelectorAll("input[name='pno']:checked");
+            let totalItems = 0;
+            let totalAmount = 0;
+            let totalDiscount = 0;
+            let totalDeliveryFee = 0;
+            let totalPoint = 0;
+
+            selectedItems.forEach(item => {
+                const row = item.closest("tr");
+                console.log(row.querySelector(".count"));
+                const count = parseInt(row.querySelector(".count").textContent); // 상품 수량
+                console.log(count);
+
+                const price = parseFloat(row.querySelector(".price").textContent.replace('원', '')); // 상품 가격
+                const discount = parseFloat(row.querySelector(".discount").textContent.replace('%', '')); // 할인율
+                const deliveryFee = parseInt(row.querySelector(".delivery").textContent.replace('원', '')) // 배송비
+
+                totalItems += count; // 상품 수량 누적
+                totalAmount += price * count; // 상품 금액 누적
+                totalDiscount += discount * count * 100; // 할인 금액 누적
+                totalDeliveryFee += deliveryFee * count // 배송비 누적
+                totalPoint += parseInt(row.querySelector(".point").textContent.replace('p', '')) * count // 적립 포인트 누적
+                console.log("selectItems..1");
+            });
+
+            // 배송비 계산
+            let comment
+            if(totalAmount >= 30000) {
+                totalDeliveryFee = 0;
+                comment = "3만원 이상 무료배송"
+
+            } else {
+                comment = totalDeliveryFee + "원";
+            }
+
+            // 전체 주문 금액 계산
+            const totalOrderAmount = totalAmount + totalDeliveryFee - totalDiscount ;
+            console.log("sumAll..1 : " + totalOrderAmount);
+
+            // 전체 합계 출력
+            sumAll[0].textContent = totalItems; // 상품수
+            sumAll[1].textContent = totalAmount.toLocaleString() + '원'; // 상품금액
+            sumAll[2].textContent = totalDiscount.toLocaleString() + '원';  // 할인금액
+            sumAll[3].textContent = totalDeliveryFee.innerText = comment; //   배송비
+            sumAll[4].textContent = totalPoint.toLocaleString() + 'p';  // 적립 포인트
+            sumAll[5].textContent = totalOrderAmount.toLocaleString() + '원';  // 전체 주문금액
+
+            console.log('sumALl : ' + sumAll);
+
+        }
+
+         sumAllList();
+
+      //  selectAllCheckbox.addEventListener('change', sumAllList);
+
+
+        /* 🎈상품 삭제 */
+        delCart.onclick = async function (e) {
+            const checkBoxes = document.querySelectorAll("input[name='pno']:checked");
+            e.preventDefault();
+            if(checkBoxes.length === 0) {
+                alert('삭제할 상품을 선택해주세요.')
+                return false;
+            }
+
+            if (confirm("정말 삭제 하시겠습니까?")) {
+                const formData = new FormData(); // FormData 객체 생성
+
+
+                checkBoxes.forEach(function (checkbox) {
+                    formData.append("pno", checkbox.value); // 선택된 체크박스의 값을 FormData에 추가
+                });
+
+                console.log([...formData]); // FormData 내용 확인
+
+                const response = await fetch('/farmstory/market/cart/delete', {
+                    method: 'POST',
+                    body: formData // FormData를 전송 데이터로 사용
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (data != null) {
+                    alert("삭제 완료!");
+                    location.reload(true);
+
+                } else {
+                    alert("삭제에 실패했습니다.");
+                }
+                return false;
+            } else {
+                return false;
+            }
+
+        }
+
+    }
+
+</script>
+
+
+<div id="sub">
+    <div><img th:src="@{../images/sub_top_tit2.png}" alt="MARKET"></div>
+    <section class="market">
+        <aside>
+            <img th:src="@{../images/sub_aside_cate2_tit.png}" alt="장보기"/>
+
+            <ul class="lnb">
+                <li class="on"><a th:href="@{/market/list}">장보기</a></li>
+            </ul>
+        </aside>
+        <article class="cart">
+            <nav>
+                <img th:src="@{../images/sub_nav_tit_cate2_tit1.png}" alt="장보기"/>
+                <p>
+                    HOME > 장보기 > <em>장보기</em>
+                </p>
+            </nav>
+
+            <!-- 내용 시작 -->
+            <p class="sort">
+                <a th:href="@{#}" class="on">장바구니 전체</a>
+            </p>
+                <form id="sendForm1"  th:action="@{/market/cart/delete}" method="post">
+                <table border="0">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox"  id="selectAll" name="selectAll" checked>
+                        </th>
+                        <th>이미지</th>
+                        <th>종류</th>
+                        <th>상품명</th>
+                        <th>수량</th>
+                        <th>할인</th>
+                        <th>포인트</th>
+                        <th>가격</th>
+                        <th>소계</th>
+                    </tr>
+                    </thead>
+                    <tbody id="prodList">
+                    <tr class="empty">
+                        <td colspan="9"  th:if="${cartDTOList == null or cartDTOList.isEmpty()}" class="emptyCart">
+                            <img th:src="@{/images/head_cart.gif}" alt=""> &nbsp;장바구니에 상품이 없습니다.
+                        </td>
+                    </tr>
+
+                    <tr th:each="cartDTO:${cartDTOList}">
+                        <td>
+                            <input type="checkbox" checked  name="pno"  th:value="${cartDTO.pno}">
+                        </td>
+                        <td>
+                            <a th:href="@{#}"><img th:src="@{|/product/${cartDTO.cate}/${cartDTO.img1}|}" class="thumb" alt="사과 500g"></a>
+                        </td>
+                        <td th:text="${cartDTO.cate}"></td>
+                        <td th:text="${cartDTO.pname}"><a th:href="@{#}"></a></td>
+                        <td class="count" th:text="${cartDTO.pcount}"></td>
+                        <td class="discount" th:text="${cartDTO.discount} + '%'"></td>
+                        <td class="point" th:text="${cartDTO.point} + 'p'"></td>
+                        <td class="price" th:text="${cartDTO.price} + '원'"></td>
+                        <td hidden class="delivery" th:text="${cartDTO.delprice} + '원'"></td>
+                        <td th:text="${cartDTO.price - (cartDTO.price * cartDTO.discount / 100)} + '원'" class="sumPrice"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input type="submit" id="delCart" name="delCart" value="선택삭제">
+                </form>
+
+
+
+            <div class="info sumALl">
+                <form id="sendForm2" th:action="@{/market/order}">
+                        <table border="0">
+                            <caption>전체합계</caption>
+                            <tr>
+                                <th>상품수</th>
+                                <td class="sumAll count">0</td>
+                            </tr>
+                            <tr>
+                                <th>상품금액</th>
+                                <td class="sumAll price">0원</td>
+                            </tr>
+                            <tr>
+                                <th>할인금액</th>
+                                <td class="sumAll discount">0원</td>
+                            </tr>
+                            <tr>
+                                <th>배송비</th>
+                                <td class="sumAll delivery">0원</td>
+                            </tr>
+                            <tr>
+                                <th>적립 포인트</th>
+                                <td class="sumAll point">0p</td>
+                            </tr>
+                            <tr>
+                                <th>전체주문금액</th>
+                                <td class="sumAll total">0원</td>
+                            </tr>
+                        </table>
+
+                    <input type="submit" class="btnOrder" value="주문하기">
+                </form>
+            </div>
+            <!-- 내용 끝 -->
+            <a href="#" id="top">
+                <img th:src="@{/images/green-top-60.png}"  alt="topBtn">
+            </a>
+        </article>
+    </section>
+
+</div>
+
+
+</html>
